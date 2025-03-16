@@ -1,47 +1,50 @@
-import { useState } from "react";
-
-// Import your images
+import React, { useState } from "react";
 import alpacaImage from "./assets/alpaca.jpg";
 import llamaImage from "./assets/llama.jpg";
 import lionImage from "./assets/lion.jpg";
 import tigerImage from "./assets/tiger.jpg";
+import "./styles.css";
 
 function App() {
-  const [image, setImage] = useState(llamaImage); // Default to Llama
+  const [images, setImages] = useState([llamaImage]);
+
+  const deleteImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
+  };
+
+  const duplicateImage = (image) => {
+    setImages([...images, image]);
+  };
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <h1 className="text-xl font-bold mb-4">Choose Your Animal</h1>
-      <img src={image} alt="Animal" className="w-64 h-64 object-cover mb-4" />
-      <div className="flex gap-4">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={() => setImage(alpacaImage)}
-        >
-          Alpaca
-        </button>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
-          onClick={() => setImage(llamaImage)}
-        >
-          Llama
-        </button>
-        <button
-          className="bg-yellow-500 text-white px-4 py-2 rounded"
-          onClick={() => setImage(lionImage)}
-        >
-          Lion
-        </button>
-        <button
-          className="bg-orange-500 text-white px-4 py-2 rounded"
-          onClick={() => setImage(tigerImage)}
-        >
-          Tiger
-        </button>
+    <div className="app">
+      <h1>Choose Your Animal</h1>
+
+      <div className="image-grid">
+        {images.map((image, index) => (
+          <div key={index} className="image-card">
+            <img src={image} alt="Animal" />
+            <div className="button-group">
+              <button className="text-button" onClick={() => duplicateImage(image)}>Duplicate</button>
+              <button className="text-button" onClick={() => deleteImage(index)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="button-container">
+        {[alpacaImage, llamaImage, lionImage, tigerImage].map((animal, index) => (
+          <button key={index} className="add-animal" onClick={() => setImages([...images, animal])}>
+            {["Alpaca", "Llama", "Lion", "Tiger"][index]}
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
 export default App;
+
+   
+
 
